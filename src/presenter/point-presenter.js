@@ -37,6 +37,7 @@ export default class PointPresenter {
       favoriteButtonClickHandler: this.#favoriteButtonClickHandler,
     });
 
+<<<<<<< HEAD
     this.#editingElement = new FormEditingView({
       point,
       destinations: this.#destinations,
@@ -44,6 +45,22 @@ export default class PointPresenter {
       rollupButtonClickHandler: this.#editComponentRollupButtonClickHandler,
       submitButtonClickHandler: this.#submitButtonClickHandler,
       deleteButtonClickHandler: this.#deleteButtonClickHandler,
+=======
+    this.#editFormItem = new FormEditingView({
+      point: this.#point, destinations: this.#destinations, offers: this.#offers,
+      onRollButtonClick: () => {
+        this.#editFormItem.reset(this.#point);
+        this.#replaceEditFormToPoint();
+      },
+      onSubmitButtonClick: async (value) => {
+        const isMinor = !isSameDate(value.dateFrom, this.#point.dateFrom) ||
+          !isSameDate(value.dateTo, this.#point.dateTo) || value.basePrice !== this.#point.basePrice;
+        await this.#updateData(ACTIONS.UPDATE_POINT, isMinor ? UPDATE_TYPES.MINOR : UPDATE_TYPES.PATCH, value);
+      },
+      onDeleteClick: async (value) => {
+        await this.#updateData(ACTIONS.DELETE_POINT, UPDATE_TYPES.MINOR, value);
+      }
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
     });
 
     if (!previusComponent || !previusEditingComponent) {
@@ -88,11 +105,27 @@ export default class PointPresenter {
   }
 
   setAborting() {
+<<<<<<< HEAD
     if (this.#mode === Mode.DEFAULT) {
       this.#component.shake();
       return;
     }
     this.#editingElement.shake(this.#editingElement.updateElement({ isDisabled: false, isSaving: false, isDeleting: false }));
+=======
+    if (this.#mode === MODE.DEFAULT) {
+      this.#pointItem.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#editFormItem.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+    this.#editFormItem.shake(resetFormState);
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   }
 
   #componentRollupButtonClickHandler = () => {

@@ -1,10 +1,19 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
+<<<<<<< HEAD
 import { getFullDate, getOffersByType, getDestinationById, getDestinationByName } from '../utils/point-utils.js';
 import { EVENTS_TYPES, EMPTY_POINT, FormType, FLATPICKR_CONFIG } from '../consts.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 function createOfferTemplate(offer, selectedOffers, isDisabled) {
+=======
+import { getFullDate, getOffersByType, getDestinationById } from '../utils/point-utils.js';
+import { EVENT_TYPES, EMPTY_POINT, FORM_TYPE, FLATPICKR_CONFIG } from '../consts.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+
+function createOfferTemplate(offer, pointOffers, isDisabled) {
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   const { id, title, price } = offer;
   const isChecked = selectedOffers.includes(id);
 
@@ -31,9 +40,15 @@ function createOfferTemplate(offer, selectedOffers, isDisabled) {
 function createTemplate(state, destinations, allOffers, formType) {
   const { id, type, destination, dateFrom, dateTo, basePrice, offers, isDisabled, isSaving, isDeleting } = state;
   const availableOffers = getOffersByType(type, allOffers);
+<<<<<<< HEAD
   const destinationInfo = getDestinationById(destination, destinations) || '';
   const isDestinationValid = Boolean(destinationInfo && destinationInfo.pictures.length && destinationInfo.description);
   const deleteLabel = isDeleting ? 'Deleting...' : 'Delete';
+=======
+  const pointDestination = getDestinationById(destination, destinations) || '';
+  const isDestinationValid = pointDestination !== '' && pointDestination.pictures.length !== 0 && pointDestination.description !== '';
+  const DeleteBtnText = isDeleting ? 'Deleting...' : 'Delete';
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
 
   return `
     <li class="trip-events__item">
@@ -72,6 +87,7 @@ function createTemplate(state, destinations, allOffers, formType) {
             </div>
           </div>
           <div class="event__field-group  event__field-group--destination">
+<<<<<<< HEAD
             <label class="event__label  event__type-output" for="event-destination-${id}">${type}</label>
             <input
               class="event__input  event__input--destination"
@@ -83,6 +99,12 @@ function createTemplate(state, destinations, allOffers, formType) {
               required
               ${isDisabled ? 'disabled' : ''}
             >
+=======
+            <label class="event__label  event__type-output" for="event-destination-${id}">
+              ${type}
+            </label>
+            <input class="event__input  event__input--destination" id="event-destination-${id}" type="text" name="event-destination" value="${pointDestination !== '' ? pointDestination.name : ''}" list="destination-list-${id}" required ${isDisabled ? 'disabled' : ''}>
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
             <datalist id="destination-list-${id}">
               ${destinations.map((dest) => `<option value="${dest.name}"></option>`).join('')};
             </datalist>
@@ -133,6 +155,7 @@ function createTemplate(state, destinations, allOffers, formType) {
             </button>
           ` : ''}
         </header>
+<<<<<<< HEAD
         ${(availableOffers.length || isDestinationValid) ? `
           <section class="event__details">
             ${availableOffers.length !== 0 ? `
@@ -156,6 +179,26 @@ function createTemplate(state, destinations, allOffers, formType) {
             ` : ''}
           </section>
         ` : ''}
+=======
+        ${availableOffers.length !== 0 || isDestinationValid ? `<section class="event__details">
+          ${availableOffers.length !== 0 ? `<section class="event__section  event__section--offers">
+            <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+            <div class="event__available-offers">
+              ${availableOffers.map((option) => createOfferTemplate(option, offers, isDisabled)).join('')}
+            </div>
+          </section>` : ''}
+
+          ${isDestinationValid ? `<section class="event__section  event__section--destination">
+            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+            <p class="event__destination-description">${pointDestination.description}</p>
+            <div class="event__photos-container">
+              <div class="event__photos-tape">
+                ${pointDestination.pictures.map((picture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`).join('')}
+              </div>
+            </div>
+          </section>` : ''}
+        </section>` : ''}
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
       </form>
     </li>
   `;

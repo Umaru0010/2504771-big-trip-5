@@ -1,4 +1,5 @@
 import TripInfoView from '../view/trip-info-view.js';
+<<<<<<< HEAD
 import { render, remove, replace, RenderPosition } from '../framework/render.js';
 import { getPointsDataRange, getTripPrice, getTripRoute } from '../utils/point-utils.js';
 
@@ -39,4 +40,38 @@ export default class TripInfoPresenter {
   }
 
   #modelChangeHandler = () => this.init();
+=======
+import { render, replace } from '../framework/render.js';
+import { RenderPosition } from '../framework/render.js';
+
+export default class TripInfoPresenter {
+  #container = null;
+  #pointsListModel = null;
+  #tripInfoComponent = null;
+
+  constructor({ container, pointsListModel }) {
+    this.#container = container;
+    this.#pointsListModel = pointsListModel;
+    this.#pointsListModel.addObserver(this.#onPointListModelChange);
+  }
+
+  init() {
+    this.#renderTripInfo();
+  }
+
+  #onPointListModelChange = () => {
+    this.#renderTripInfo();
+  };
+
+  #renderTripInfo() {
+    const prevComponent = this.#tripInfoComponent;
+    this.#tripInfoComponent = new TripInfoView(this.#pointsListModel.points, this.#pointsListModel.destinations, this.#pointsListModel.offers);
+
+    if (prevComponent === null) {
+      render(this.#tripInfoComponent, this.#container, RenderPosition.AFTERBEGIN);
+    } else {
+      replace(this.#tripInfoComponent, prevComponent);
+    }
+  }
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
 }

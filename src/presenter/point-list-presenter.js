@@ -10,6 +10,7 @@ import { pointsSorters } from '../utils/sort-utils.js';
 import { pointsFilters } from '../utils/filter-utils.js';
 import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 
+<<<<<<< HEAD
 export default class PointsListPresenter {
   #component = new PointRouteListView();
   #container;
@@ -21,6 +22,22 @@ export default class PointsListPresenter {
   #emptyElement;
   #loadingElement = new LoadingView();
   #errorElement = new ErrorView();
+=======
+export default class PointListPresenter {
+  #pointsListComponent = new PointRouteListView();
+  #tripEventsContainer = null;
+  #pointsListModel = null;
+  #emptyPointListComponent = null;
+  #sortComponent = null;
+  #currentSortType = SORT_TYPES.DAY;
+  #filterType = FILTER_TYPES.EVERYTHING;
+  #filterModel = null;
+  #newPointButtonPresenter = null;
+  #newPointPresenter = null;
+  #pointPresenters = new Map();
+  #loadingComponent = new LoadingView();
+  #errorComponent = new ErrorView();
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   #isLoading = true;
   #uiBlocker = new UiBlocker({ lowerLimit: TimeLimit.LOWER_LIMIT, upperLimit: TimeLimit.UPPER_LIMIT });
   #newPointPresenter;
@@ -45,6 +62,91 @@ export default class PointsListPresenter {
   }
 
   init() {
+<<<<<<< HEAD
+=======
+    this.#newPointButtonPresenter.disableButton();
+    this.#renderSort();
+    this.#renderList();
+  }
+
+  #renderPoint(point) {
+    const pointPresenter = new PointPresenter({
+      destinations: this.#pointsListModel.destinations,
+      offers: this.#pointsListModel.offers,
+      pointsListComponent: this.#pointsListComponent,
+      updateData: this.#changePointsList,
+      changeMode: this.#onModeChange
+    });
+    pointPresenter.init(point);
+    this.#pointPresenters.set(point.id, pointPresenter);
+  }
+
+  #onModeChange = () => {
+    this.#pointPresenters.forEach((presenter) => presenter.resetView());
+    this.#newPointPresenter.destroy();
+  };
+
+  #changePointsList = async (action, updateType, update) => {
+    this.#uiBlocker.block();
+    switch (action) {
+      case ACTIONS.UPDATE_POINT:
+        this.#pointPresenters.get(update.id).setSaving();
+        try {
+          await this.#pointsListModel.updatePoint(updateType, update);
+        } catch (err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
+        break;
+      case ACTIONS.DELETE_POINT:
+        this.#pointPresenters.get(update.id).setDeleting();
+        try {
+          await this.#pointsListModel.deletePoint(updateType, update);
+        } catch (err) {
+          this.#pointPresenters.get(update.id).setAborting();
+        }
+        break;
+      case ACTIONS.ADD_POINT:
+        this.#newPointPresenter.setSaving();
+        try {
+          await this.#pointsListModel.addPoint(updateType, update);
+        } catch (err) {
+          this.#newPointPresenter.setAborting();
+        }
+        break;
+    }
+
+    this.#uiBlocker.unblock();
+  };
+
+  #updatePointsList = (updateType, data) => {
+    switch (updateType) {
+      case UPDATE_TYPES.PATCH:
+        this.#pointPresenters.get(data.id).init(data);
+        break;
+      case UPDATE_TYPES.MINOR:
+        this.#clearPointsList();
+        this.#renderList();
+        break;
+      case UPDATE_TYPES.MAJOR:
+        this.#clearPointsList(true);
+        this.#renderList();
+        break;
+      case UPDATE_TYPES.INIT:
+        this.#isLoading = false;
+        remove(this.#loadingComponent);
+        if (data.isError) {
+          this.#newPointButtonPresenter.disableButton();
+          this.#renderError();
+          return;
+        }
+        this.#newPointButtonPresenter.enableButton();
+        this.#renderList();
+    }
+  };
+
+  onNewPointButtonClick = () => {
+    this.#filterModel.setFilter(UPDATE_TYPES.MAJOR, FILTER_TYPES.EVERYTHING);
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
     this.#newPointButtonPresenter.disableButton();
     this.#renderList();
   }
@@ -87,7 +189,16 @@ export default class PointsListPresenter {
   }
 
   #renderError() {
+<<<<<<< HEAD
     render(this.#errorElement, this.#container, RenderPosition.BEFOREEND);
+=======
+    render(this.#errorComponent, this.#tripEventsContainer, RenderPosition.BEFOREEND);
+  }
+
+  get points() {
+    this.#filterType = this.#filterModel.filter;
+    return pointsFilters[this.#filterType](this.#pointsListModel.points);
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   }
 
   #clearPointsList() {

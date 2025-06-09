@@ -77,8 +77,56 @@ export const FLATPICKR_CONFIG = {
   time_24hr: true,
 };
 
+<<<<<<< HEAD
 export const AUTHORIZATION = 'Basic q1w2e3r4t5y6u6i7';
+=======
+const METHOD = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
+const TIME_LIMIT = {
+  LOWER_LIMIT: 200,
+  UPPER_LIMIT: 500,
+};
+
+const FLATPICKR_CONFIG = {
+  dateFormat: 'd/m/y H:i',
+  enableTime: true,
+  locale: {
+    firstDayOfWeek: 1,
+  },
+  // eslint-disable-next-line camelcase
+  time_24hr: true,
+};
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
 
 export const END_POINT = 'https://24.objects.htmlacademy.pro/big-trip';
 
+<<<<<<< HEAD
 export const CITIES_LENGTH_BORDER = 3;
+=======
+const END_POINT = 'https://21.objects.htmlacademy.pro/big-trip';
+
+const CITIES_LENGTH_BORDER = 3;
+
+export {
+  EVENT_TYPES,
+  FILTER_TYPES,
+  EMPTY_LIST_MESSAGES,
+  SORT_TYPES,
+  MODE,
+  ACTIONS,
+  UPDATE_TYPES,
+  EMPTY_POINT,
+  FORM_TYPE,
+  METHOD,
+  AUTHORIZATION,
+  END_POINT,
+  TIME_LIMIT,
+  CITIES_LENGTH_BORDER,
+  FLATPICKR_CONFIG,
+};
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94

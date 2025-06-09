@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import FilterView from '../view/filter-view.js';
 import { FilterType, UpdateType } from '../consts.js';
 import { pointsFilters } from '../utils/filter-utils.js';
 import { render, replace } from '../framework/render.js';
+=======
+import { FiltersView } from '../view/filter-view.js';
+import { FILTER_TYPES, UPDATE_TYPES } from '../consts.js';
+import { pointsFilters } from '../utils/filter-utils.js';
+import { render, replace } from '../framework/render';
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
 
 export default class FilterPresenter {
   #container;
@@ -14,8 +21,25 @@ export default class FilterPresenter {
     this.#filterModel = filterModel;
     this.#pointsListModel = pointsListModel;
 
+<<<<<<< HEAD
     this.#filterModel.addObserver(this.#modelChangeHandler);
     this.#pointsListModel.addObserver(this.#modelChangeHandler);
+=======
+    this.#pointsModel.addObserver(this.#onPointsModelChange);
+    this.#filterModel.addObserver(this.#onPointsModelChange);
+  }
+
+  get filters() {
+    const allPoints = this.#pointsModel.points;
+    return Object.values(FILTER_TYPES).map((type) => {
+      const count = pointsFilters[type](allPoints).length;
+      return {
+        id: type,
+        name: type,
+        disabled: count === 0
+      };
+    });
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   }
 
   init() {

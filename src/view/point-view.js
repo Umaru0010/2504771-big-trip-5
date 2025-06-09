@@ -20,9 +20,15 @@ function createOfferItem(offerId, availableOffers) {
 function createTemplate(point, destinations, allOffers) {
   const { type, destination, dateFrom, dateTo, basePrice, offers, isFavorite } = point;
 
+<<<<<<< HEAD
   const startingDate = getMonthAndDay(dateFrom);
   const startingTime = getTime(dateFrom);
   const endingTime = getTime(dateTo);
+=======
+  const startDate = getMonthAndDay(dateFrom);
+  const startTime = getTime(dateFrom);
+  const endTime = getTime(dateTo);
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   const duration = getDateDifference(dateFrom, dateTo);
   const availableOffers = getOffersByType(type, allOffers);
   const destinationInfo = getDestinationById(destination, destinations);
@@ -40,9 +46,15 @@ function createTemplate(point, destinations, allOffers) {
         <h3 class="event__title">${type} ${destinationInfo.name}</h3>
         <div class="event__schedule">
           <p class="event__time">
+<<<<<<< HEAD
             <time class="event__start-time" datetime="${dateFrom}">${startingTime}</time>
             &mdash;
             <time class="event__end-time" datetime="${dateTo}">${endingTime}</time>
+=======
+            <time class="event__start-time" datetime="${dateFrom}">${startTime}</time>
+            &mdash;
+            <time class="event__end-time" datetime="${dateTo}">${endTime}</time>
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
           </p>
           <p class="event__duration">${duration}</p>
         </div>
@@ -82,10 +94,23 @@ export default class PointRouteView extends AbstractView {
     this.#rollupButtonClickHandler = rollupButtonClickHandler;
     this.#favoriteButtonClickHandler = favoriteButtonClickHandler;
 
+<<<<<<< HEAD
     const rollupButtonElement = this.element.querySelector('.event__rollup-btn');
     const favoriteButtonElement = this.element.querySelector('.event__favorite-btn');
     rollupButtonElement.addEventListener('click', this.#rollupButtonElementClickHandler);
     favoriteButtonElement.addEventListener('click', this.#favoriteButtonElementClickHandler);
+=======
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', (event) => {
+      event.preventDefault();
+      onRollButtonClick();
+    });
+
+    this.element.querySelector('.event__favorite-btn').addEventListener('click', (event) => {
+      event.preventDefault();
+      onFavoriteClick();
+      event.currentTarget.blur();
+    });
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
   }
 
   get template() {

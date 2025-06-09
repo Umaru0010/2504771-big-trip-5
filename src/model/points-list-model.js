@@ -73,4 +73,23 @@ export default class PointsListModel extends Observable {
       throw new Error('Can\'t delete point');
     }
   }
+<<<<<<< HEAD
+=======
+
+  async init() {
+    let isError = false;
+    try {
+      const points = await this.#pointsApiService.points;
+      this.#points = points.map(adaptToClient);
+      this.#destinations = await this.#pointsApiService.destinations;
+      this.#offers = await this.#pointsApiService.offers;
+    } catch (err) {
+      this.#points = [];
+      this.#offers = [];
+      this.#destinations = [];
+      isError = true;
+    }
+    this._notify(UPDATE_TYPES.INIT, { isError });
+  }
+>>>>>>> 525c7aed1fda264884e11d7e957939d137fa0a94
 }
