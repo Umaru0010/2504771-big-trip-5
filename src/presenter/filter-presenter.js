@@ -1,54 +1,42 @@
-import { FiltersView } from '../view/filter-view.js';
-import { FILTER_TYPES, UPDATE_TYPES } from '../consts.js';
-import { render, replace } from '../framework/render';
+import FilterView from '../view/filter-view.js';
+import { FilterType, UpdateType } from '../consts.js';
+import { pointsFilters } from '../utils/filter-utils.js';
+import { render, replace } from '../framework/render.js';
 
 export default class FilterPresenter {
-  #filterContainer = null;
-  #filterModel = null;
-  #pointsModel = null;
-  #filterComponent = null;
+  #container;
+  #filterModel;
+  #pointsListModel;
+  #component;
 
-  #onFilterTypeChange = (filterType) => {
-    if (this.#filterModel.filter === filterType) {
-      return;
-    }
-    this.#filterModel.setFilter(UPDATE_TYPES.MAJOR, filterType);
-  };
-
-  #onPointsModelChange = () => {
-    this.init();
-  };
-
-  constructor({ filterContainer, filterModel, pointsListModel }) {
-    this.#filterContainer = filterContainer;
+  constructor({ containerElement, filterModel, pointsListModel }) {
+    this.#container = containerElement;
     this.#filterModel = filterModel;
-    this.#pointsModel = pointsListModel;
+    this.#pointsListModel = pointsListModel;
 
-    this.#pointsModel.addObserver(this.#onPointsModelChange);
-    this.#filterModel.addObserver(this.#onPointsModelChange);
-  }
-
-  get filters() {
-    return Object.values(FILTER_TYPES).map((type) => ({
-      id: type,
-      name: type,
-    }));
+    this.#filterModel.addObserver(this.#modelChangeHandler);
+    this.#pointsListModel.addObserver(this.#modelChangeHandler);
   }
 
   init() {
-    const prevFilterComponent = this.#filterComponent;
-
-    this.#filterComponent = new FiltersView({
-      filters: this.filters,
-      currentFilter: this.#filterModel.filter,
-      onFilterTypeChange: this.#onFilterTypeChange,
+    const previusComponent = this.#component;
+    this.#component = new FilterView({
+      filters: Object.values(FilterType).map((filterType) => ({
+        filterType,
+        isDisabled: pointsFilters[filterType](this.#pointsListModel.points).length === 0
+      })),
+      currentFilterType: this.#filterModel.currentFilterType,
+      filterTypeChangeHandler: this.#filterTypeChangeHandler,
     });
 
-    if (prevFilterComponent === null) {
-      render(this.#filterComponent, this.#filterContainer);
-      return;
+    if (!previusComponent) {
+      render(this.#component, this.#container);
+    } else {
+      replace(this.#component, previusComponent);
     }
-
-    replace(this.#filterComponent, prevFilterComponent);
   }
+
+  #filterTypeChangeHandler = (filterType) => this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
+
+  #modelChangeHandler = () => this.init();
 }
